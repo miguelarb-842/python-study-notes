@@ -178,7 +178,7 @@ flowchart TD
     end
 
     subgraph HEAP["HEAP - objeto real"]
-        objeto_lista["lista: [99, 20, 30]<br/>id: 140123456789"]
+        objeto_lista["[99, 20, 30]<br/>id: 140123456789"]
     end
 
     lista -->|apunta a id: 140123456789| objeto_lista
