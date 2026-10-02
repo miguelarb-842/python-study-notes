@@ -84,7 +84,7 @@ usuario:list[ int | str | bool ] = [
 ```
 
 > [!IMPORTANT]
-    > Las listas echas de tipo 'List[dic(str:Any)]' son listas Homogeneas ya que contine dos tipos de datos en su definicion.
+> Las listas echas de tipo 'List[dic(str:Any)]' son listas Homogeneas ya que contine dos tipos de datos en su definicion.
 
 3.  **lista anidada (ArrayList or Matriz)**
    
@@ -142,12 +142,10 @@ Por defecto python retorna el valor de id de direccion de memoria de cualquier o
 
 
 ```python
+lista:list[int] = [0,1,2,3,4,5,6,7]
 
-    lista:list[int] = [0,1,2,3,4,5,6,7]
-
-    print(hex(id(lista)))
-    print(bin(id(lista)))
-
+print(hex(id(lista)))
+print(bin(id(lista)))
 ```
 
 De esa mamera de convierte el valor decimal de la lista un hexa-decimal o binario
@@ -193,31 +191,33 @@ flowchart TD
 
 En python los indices de una lista son un referencia numerica asignada a un elemento empezando desde 0 no desde 1. En esa posicion es el indice, veamoslo con un ejemplo anterior.
 
-> [!WARNING]  
-    > Tener encuenta no se puden ingresar valores decimales a en el indice esperado debe ser si o si un int 
+> [!WARNING]
+> Tener encuenta no se puden ingresar valores decimales a en el indice esperado debe ser si o si un int 
 
-> [!WARNING]  
- > Tambien hay que tener en cuenta que si se ingresa un valor fuera de rango enviara un error `IndexError: list index out of range`. El rango valido de indices es de -n a n - 1, siendo n la cantidad de elementos que tengamos en la lista. Es decir, los indices positivos van de 0 a n - 1, y los indices negativos van de -n a -1.
+> [!WARNING]
+> Tambien hay que tener en cuenta que si se ingresa un valor fuera de rango enviara un error `IndexError: list index out of range`. El rango valido de indices es de -n a n - 1, siendo n la cantidad de elementos que tengamos en la lista. Es decir, los indices positivos van de 0 a n - 1, y los indices negativos van de -n a -1.
 
-```Python
+```python
 
 frutas = ["manzana", "banana", "cereza", "durazno"]
 #            0          1          2         3
 
 ```
-- Índices positivos: 
+
+#### Índices positivos
 
 Cuentan desde el inicio hacia la derecha, empezando en 0
 
-```Python
+```python
 print(frutas[0])   # "manzana"  → primer elemento
 print(frutas[2])   # "cereza"
 ```
-- Índices negativos:
+
+#### Índices negativos
 
 Python permite contar desde el final hacia la izquierda, empezando en -1 (no en -0, porque 0 ya está tomado por el primer elemento).
 
-```Python
+```python
 print(frutas[-1])   # "durazno"  → último elemento
 print(frutas[-2])   # "cereza"   → penúltimo
 ```
@@ -225,62 +225,236 @@ Esto es muy práctico cuando no sabés (o no querés calcular) el tamaño de la 
 
 ### Acceso y modificacion
 
-- Acceso a elementos:
+#### Acceso a elementos
 
 Se hace con el operador [] seguido del índice aca lo que se hace es crear una instacia de valor y se asigna el valor en esa posicion de esa lista:
 
-```Python
+```python
 nombre = frutas[1]
 print(nombre)   # "banana"
 ```
-- Modificación de elementos:
+
+#### Modificación de elementos
 
 Como las listas son mutables, podés reasignar el valor de una posición específica sin crear una lista nueva(esto conecta directo con lo que ya vimos de referencias — el id de la lista no cambia):
 
-```Python
+```python
 frutas[0] = "kiwi"
 print(frutas)          # ['kiwi', 'banana', 'cereza', 'durazno']
 print(id(frutas))      # el mismo id de antes, no se creó objeto nuevo
 ```
 
-
-
 ## Métodos de listas
+
+Los métodos de listas en Python modifican el Heap de la lista existente agregando una nueva referencia a este espacio sin necesidad de crear una nueva instancia. Estos métodos tienen la particularidad de recibir siempre un parámetro `self`, que no es más que la autoreferencia del objeto sobre el cual se está aplicando la función. A través de este `self`, el método reconoce la dirección de memoria en el Stack que apunta al objeto en el Heap, permitiendo realizar la modificación directamente en el sitio (in-place).
 
 ### Agregar elementos
 
-- `append()`
-- `insert()`
-- `extend()`
+> [!TIP]
+> extend() = Suma los elementos internos del objeto al Heap.append() 
+> insert() = Suman el objeto completo (como un contenedor cerrado) al Heap.
+
+#### `append()`
+
+El metodo append() agrega un nuevo elemento al final de la lista. El metodo como tal retorna None lo que hace en si no modifica ni crea una nueva memoria en el heap que vive la lista el solo agrega una nueva direccion de memoria de stack que vive en la lista osea el heap.
+
+#### `insert()`
+
+El insert() funciona bajo la misma logica de append busca un self de referenciay un objeto a hacer agregado pero aca pasa algo mas, el espera un argumento de indice y su parametro es un index el ubica al objeto en una posicion espesifica.
+
+Si en caso que no se lleve a ingresar el argumento esperado el lanzara un TypeError de que espera 2 argumentos y solo se ingreso uno si en caso de ingresar un indece mucho mayor el siempre lo pondra al final de la lista.
+y la continuidad sera normal
+
+#### `extend()`
+
+El extend() es un metodo para extender una lista con elemento iterable que significa no
+acepta un metodo solo aislado tiene que ser una dict un conjunto una lista 
+pero de manera iterable. Si se le ingresa un dato no iterable mandara un TypeError
 
 ### Eliminar elementos
 
-- `remove()`
-- `pop()`
-- `clear()`
-- `del`
+#### `remove()`
+
+El metodo remove funciona con el valor que se quiere el liminar se elimina de forma derecta en el stock y modifica a la lista original en el heap. El metodo remove toma el valor directo del la instancia del self al objeto que se este ocupando si el objeto toma una intancia de objeto de dato primitivo int este espera que sea un int igualmente si es un str o algun otro tipo de dato. 
+
+El remove funciona con un call object by Reference para ayar la referncia a ese valor asu ves borrar el valor y su referencia
+del stock no una referencia por lo que cuando tengamos un listas de referncias que viven el heap como dict o un ArrayList se tiene que pasar los datos especificos para borrarlos.
+
+Cuando se ingresa un dato fuera de rango (elemnto que o valor que no se encuentra en la lista) manda un error de valor ya que no es un valor que se encuentre en la lista.
+
+#### `pop()`
+
+El método .pop() modifica la lista original directamente en el Heap,
+eliminando la referencia que la lista tiene hacia ese objeto 
+(y si ningún otro elemento apunta a él, el Garbage Collector liberará el valor de la memoria). 
+
+A diferencia de .remove(), .pop() no espera un valor, sino un índice de tipo entero (int) que representa 
+la posición en el Stack de la lista. Además, a diferencia de .remove(), .pop() 
+tiene la cualidad de retornar (devolver) el objeto eliminado, 
+permitiéndote guardarlo en otra variable si lo necesitas.
+
+Si se ingresa un tipo de dato que no sea un entero (como un str o un dict), 
+Python lanzará un TypeError porque el método exige un índice numérico válido.
+
+Si se ingresa un índice que no existe (fuera de los límites de la lista), 
+lanzará un IndexError (error de índice fuera de rango).
+
+pop() elimina por defecto el último elemento de la lista (índice -1).
+
+#### `clear()`
+
+El método .clear() modifica la lista original directamente en el Heap, 
+eliminando todas las referencias que la lista tiene hacia sus elementos/objetos de forma simultánea, 
+sin importar el tipo de dato que almacene (ya sean primitivos o estructuras complejas).
+
+A diferencia de 
+.remove() o .pop(), este método no requiere ningún argumento (no recibe valores ni índices) 
+y no genera errores de rango o tipo, ya que su única función es romper el vínculo entre la lista 
+y todos los objetos a los que apuntaba.Tras ejecutar .clear(), la estructura de la lista permanece 
+intacta en el Heap (mantiene su misma dirección de memoria o id()), pero queda completamente vacía. 
+
+Los objetos que estaban dentro serán destruidos por el Garbage Collector 
+(recolector de basura) solo si ninguna otra variable en el Stack sigue apuntando a ellos.
+
+#### `del`
+
+A diferencia de .remove(), .pop() o .clear(), del no es un método, 
+sino una palabra clave (keyword) o instrucción nativa de Python. 
+
+Su función principal no es borrar objetos directamente de la memoria, 
+sino al objeto del namespace (frame local o globals()), 
+y también opera sobre índices, slices, claves de dict y atributos.
+
+del borra datos enteros de referncias a ese objeto mas que todo no 
+elimina el objeto como tal si no la referncia de ese dato al heap de donde se este ocupando
+en caso que esta no tenga mas referencias ella queda huerfana y Garbage Collector en CPython 
+se liberan de inmediato al llegar el refcount a 0. El GC generacional solo limpia ciclos de referencias.
+
+Si intentas usar la variable después de borrarla, Python lanzará un NameErro
 
 ### Buscar y contar
 
-- `index()`
-- `count()`
-- `len()`
-- `in`
-- `not in`
+#### `index()`
+
+.index() es un método de las listas en Python. Por defecto recorre la
+lista buscando el valor que queremos y devuelve el índice (la posición)
+de la primera coincidencia que encuentra, el recibe hasta 3 argumentos:
+
+value: es obligatorio es el elemento a buscar
+start: es opcional es la posición donde inicia la búsqueda
+stop es opcional Posición donde se detiene (no incluida)
+
+- Si el valor no está en la lista el lanzará un ValueError
+- start como stop admiten números negativos (cuentan desde el final)
+- La búsqueda siempre se realiza de izquierda a derecha
+
+OJO: Si no defines el método especial de igualdad __eq__ 
+en tu clase el index() comparará las direcciones de 
+memoria reales en el Heap. Es decir solo encontrará el 
+objeto exacto si pasas la misma referencia de variable 
+pero fallará si creas un objeto nuevo con los mismos datos internos
+
+#### `count()`
+
+El método .count() recorre la lista completa elemento por elemento Compara 
+cada posición mediante igualdad (==) con el valor que le pasamos.
+
+Cuenta cuántas veces se repite un elemento con el mismo contenido en la lista y retorna la cantidad
+Si el valor no se encuentra en ningún lado, devuelve 0
+Si se llama vacío sin argumentos, lanzará un TypeError
+Al comparar colecciones (como listas anidadas), evalúa el contenido exacto 
+
+por ejemplo, [] no es igual a, ni el entero 2 es igual a la 
+
+#### `len()`
+
+En una lista trabajamos con elementos cada parte de la 
+lista es un elementoal ocupar len() cuenta la cantidad 
+de elementos que hay en la List sin importar el tipo.
+
+La lista guarda apuntadores (referencias) a objetos que viven en el Heap 
+Python obtiene directamente el conteo de estas referencias
+
+#### `in`
+
+'in' es un operador de membresía (pertenencia) que actúa como un filtro lógico 
+devuelviendo un flag (True o False). Opera bajo las mismas reglas de comparación 
+que .index() al buscar la referencia del objeto en el Heap usando el apuntador 
+que viene desde el Stack.
+
+- Si la condición de igualdad (__eq__) se cumple, devuelve True; de lo contrario, False
+- Al devolver un booleano es muy común combinarlo con estructuras de control
+
+El not in es un operador unico de membresia not solamente cambia o invierte la logica 
+o la flag que de devuelve el operador.
 
 ### Ordenar y modificar
 
-- `sort()`
-- `reverse()`
+#### `sort()`
+
+El metodo sort() odena la lista a nivel desendente o densendente esto no genera una nueva instancia,
+modifica el orden de referencias de stock en el heap in-place.
+
+El resive dos argumentos 
+
+reverse: por defecto esta en false, sirve para odendenarla en orden inverso si esta en true
+key: ecibe una función que transforma cada elemento antes de compararlo normalnte funciones lambda
+
+Como al ser un metodo y no genera instancia este retorna None siempre
+
+#### `reverse()`
+
+El metodo reverse invierte el orden de la lista modifica la lista orginal no devuleve 
+una lista nueva (in-place). No resive ningun parametro solamnete la referncia self 
+de la lista.
 
 ### Copiar
 
-- `copy()`
+#### `copy()`
 
-## 4. Operaciones con listas
+El método .copy() realiza una COPIA SUPERFICIAL (shallow copy) de la lista:
 
-- Concatenación `+`
-- Repetición `*`
+- Genera una nueva lista en el Heap con un ID de memoria único.
+- Duplica los apuntadores de los elementos de la lista original hacia la nueva.
+- Para datos inmutables (int, str), actúan de forma independiente al modificarse.
+- Para datos mutables anidados (listas, dicts), ambas listas comparten el mismo 
+apuntador en el Heap, por lo que modificar el interior de uno alterará al otro.
+
+## Operaciones con listas
+
+#### Concatenación `+`
+
+La concatenación es la combinación de dos o más listas mediante el operador +, creando una nueva instancia de lista. La nueva variable contiene una referencia al nuevo objeto creado en memoria. Las listas originales no son modificadas.
+
+Al concocatenar las listas estas no se ordenan simplemete se añaden tal cual como estan y el resultado se asigna a una variable que contiene una referencia al nuevo objeto lista.
+
+Tambien se puden hacer reacionaciones con el operador += que guarda la referncia al mismo objeto.
+
+#### Repetición `*`
+
+El operador * se conoce como repetición este operador funciona de la siguiente forma: 
+
+    lista * n 
+
+Siendo n un número entero es decir de tipo int 
+
+- Si este número entero es negativo se genera una lista vacía ya que Python interpreta que debe realizar 0 
+repeticiones mismo caso ocurre si se utiliza 0 como multiplicador 
+- Si se ingresa un valor incorrecto, se generará un TypeError 
+
+La lista que se genera es un nuevo objeto. La variable que recibe el resultado contiene una 
+referencia hacia ese nuevo objeto
+
+Se puede realizar una reasignación utilizando el operador *=: 
+
+    lista *= n 
+
+En este caso, la lista se modifica para repetir sus elementos n veces
+
+Tambien duplicaciones de un elemto de la lista 
+
+    lista[i] *= n
+
 - Comparación de listas
 - Asignación
 - Referencias
@@ -288,7 +462,7 @@ print(id(frutas))      # el mismo id de antes, no se creó objeto nuevo
 - Desempaquetado
 - Desempaquetado extendido
 
-## 5. Recorridos
+## Recorridos
 
 - Recorrido con `for`
 - Recorrido con `while`
@@ -297,7 +471,7 @@ print(id(frutas))      # el mismo id de antes, no se creó objeto nuevo
 - `range()`
 - `enumerate()`
 
-## 6. Slicing
+## Slicing
 
 - `[inicio:fin]`
 - `[inicio:fin:paso]`
@@ -307,7 +481,7 @@ print(id(frutas))      # el mismo id de antes, no se creó objeto nuevo
 - `[::-1]`
 - Modificación mediante slicing
 
-## 7. Listas anidadas
+## Listas anidadas
 
 - Concepto de listas anidadas
 - Listas dentro de listas
@@ -317,7 +491,7 @@ print(id(frutas))      # el mismo id de antes, no se creó objeto nuevo
 - Matrices
 - Filas y columnas
 
-## 8. Listas y otras estructuras
+## Listas y otras estructuras
 
 ### Listas + Tuplas
 
